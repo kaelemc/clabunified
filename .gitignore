@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.vite/
+out/
+*.tgz
+apps/desktop/release/
+
+# Test output
+coverage/
+test-results/
+playwright-report/
+blob-report/
+.nyc_output/
+
+dev/topologies/

@@ -21,7 +21,7 @@
     "dev:pages": "npm run dev:frontend",
     "dev:desktop": "npm run build:clab-ui && npm run dev --workspace containerlab-desktop",
     "build": "npm run build:frontend",
-    "build:frontend": "npm run build:pages",
+    "build:frontend": "VITE_PUBLIC_BASE_PATH=/ npm run build:pages",
     "build:all": "npm run build:web && npm run build:desktop",
     "build:clab-ui": "npm run build --workspace @srl-labs/clab-ui",
     "build:web": "npm run build:clab-ui && npm run build --workspace containerlab-app-web",

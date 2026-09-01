@@ -164,6 +164,12 @@ const TREE_ENDPOINT_ROW_HEIGHT_PX = 24;
 const RESIZE_DIVIDER_HEIGHT_PX = 4;
 const MIN_SECTION_BODY_HEIGHT_PX = 40;
 const FIXED_HEIGHT_SECTIONS: ReadonlySet<ExplorerSectionId> = new Set(["helpFeedback"]);
+const NATIVE_SECTION_TITLE_FONT =
+  "var(--vscode-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif)";
+const NATIVE_TITLE_SECTIONS: ReadonlySet<ExplorerSectionId> = new Set([
+  "runningLabs",
+  "localLabs"
+]);
 
 const STATUS_COLOR_MAP: Record<string, string> = {
   green: COLOR_SUCCESS_MAIN,
@@ -2390,7 +2396,16 @@ function ExplorerSectionCard({
               gap: 4
             }}
           >
-            <Text className="explorer-section-title" size="sm" truncate="end">
+            <Text
+              className="explorer-section-title"
+              size="sm"
+              truncate="end"
+              style={{
+                fontFamily: NATIVE_TITLE_SECTIONS.has(section.id)
+                  ? NATIVE_SECTION_TITLE_FONT
+                  : undefined
+              }}
+            >
               {formatSectionTitle(section)}
             </Text>
             {showSectionCount(section) && (

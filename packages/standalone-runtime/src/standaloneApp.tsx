@@ -8,7 +8,7 @@ import "@srl-labs/clab-ui/styles/global.css";
 import * as EditorWorkerModule from "@srl-labs/clab-ui/monaco/editor-worker?worker";
 import * as JsonWorkerModule from "@srl-labs/clab-ui/monaco/json-worker?worker";
 import * as YamlWorkerModule from "@srl-labs/clab-ui/monaco/yaml-worker?worker";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, type ReactNode } from "react";
 import {
   App,
   EXPORT_COMMANDS,
@@ -124,6 +124,43 @@ const LazyRuntimeTerminalWindows = lazy(async () => {
   const module = await import("./components/RuntimeTerminalWindows");
   return { default: module.RuntimeTerminalWindows };
 });
+
+function PagesWipFrame({ children }: { children: ReactNode }) {
+  if (!isPagesRuntimeMode()) {
+    return children;
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 0 }}>
+      <div
+        role="status"
+        style={{
+          flex: "0 0 auto",
+          padding: "6px 12px",
+          textAlign: "center",
+          backgroundColor: "#f59e0b",
+          color: "#1f2937",
+          fontFamily:
+            "var(--vscode-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif)",
+          fontSize: 13,
+          fontWeight: 600,
+          lineHeight: 1.4,
+        }}
+      >
+        This is a WIP/PoC, please visit:{" "}
+        <a
+          href="https://srl-labs.github.io/containerlab-app/"
+          target="_blank"
+          rel="noreferrer"
+          style={{ color: "inherit", textDecoration: "underline" }}
+        >
+          https://srl-labs.github.io/containerlab-app/
+        </a>
+      </div>
+      <div style={{ flex: 1, minHeight: 0 }}>{children}</div>
+    </div>
+  );
+}
 
 const LazyRuntimeActionDialogs = lazy(async () => {
   const module = await import("./components/RuntimeActionDialogs");
@@ -2153,26 +2190,28 @@ function StandaloneApp() {
       {activeLabTabKind === "file" ? (
         <style>{FILE_TAB_TOPOLOGY_CHROME_CSS}</style>
       ) : null}
-      <StandaloneSettingsProvider
-        value={{
-          currentTheme: theme,
-          defaultApiUrl,
-          endpoints: endpointList,
-          onAddEndpoint: handleAddEndpoint,
-          onExportEndpoints: handleExportEndpoints,
-          onImportEndpoints: handleImportEndpoints,
-          onLogout: handleLogout,
-          onReconnectEndpoint: handleReconnectEndpoint,
-          onRemoveEndpoint: handleRemoveEndpoint,
-          onUpdateEndpoint: handleUpdateEndpoint,
-          onSetEndpointSessionDuration: handleSetEndpointSessionDuration,
-          onSaveTerminalPreferences: handleSaveTerminalPreferences,
-          onThemeChange: handleThemeChange,
-          terminalPreferences
-        }}
-      >
-        <App initialData={initialData} runtime={runtimeWithColorScheme ?? standaloneRuntime!} />
-      </StandaloneSettingsProvider>
+      <PagesWipFrame>
+        <StandaloneSettingsProvider
+          value={{
+            currentTheme: theme,
+            defaultApiUrl,
+            endpoints: endpointList,
+            onAddEndpoint: handleAddEndpoint,
+            onExportEndpoints: handleExportEndpoints,
+            onImportEndpoints: handleImportEndpoints,
+            onLogout: handleLogout,
+            onReconnectEndpoint: handleReconnectEndpoint,
+            onRemoveEndpoint: handleRemoveEndpoint,
+            onUpdateEndpoint: handleUpdateEndpoint,
+            onSetEndpointSessionDuration: handleSetEndpointSessionDuration,
+            onSaveTerminalPreferences: handleSaveTerminalPreferences,
+            onThemeChange: handleThemeChange,
+            terminalPreferences
+          }}
+        >
+          <App initialData={initialData} runtime={runtimeWithColorScheme ?? standaloneRuntime!} />
+        </StandaloneSettingsProvider>
+      </PagesWipFrame>
       <StandaloneFileEditorTabMount />
       <StandaloneLabEmptyStateMount />
       {runtimeDialogsReady ? (
